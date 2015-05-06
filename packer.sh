@@ -33,6 +33,9 @@ pacman -Rdd par2cmdline --noconfirm
 # install multi-threaded par2cmdline
 su -c "packer -S par2cmdline-tbb --noconfirm" - makepkg-user
 
+# set explicit install for sed and grep to prevent removal when uninstalling base-devel and packer
+pacman -D --asexplicit sed grep --noconfirm
+
 # remove base devel tools and packer
 pacman -Ru packer base-devel git --noconfirm
 
