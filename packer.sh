@@ -27,17 +27,17 @@ pacman -U /home/makepkg-user/packer/packer*.tar.xz --noconfirm
 # install app from aur
 su -c "packer -S sabnzbd --noconfirm" - makepkg-user
 
-# uninstall par2cmdline
+# uninstall par2cmdline as using multi-threaded version from aur
 pacman -Rdd par2cmdline --noconfirm
 
 # install multi-threaded par2cmdline
 su -c "packer -S par2cmdline-tbb --noconfirm" - makepkg-user
 
-# set explicit install for sed and grep to prevent removal when uninstalling base-devel and packer
-pacman -D --asexplicit sed grep --noconfirm
-
 # remove base devel tools and packer
 pacman -Ru packer base-devel git --noconfirm
+
+# re-install sed and grep as these packages are removed when uninstalling base-devel
+pacman -S --needed sed grep --noconfirm
 
 # delete makepkg-user account
 userdel -r makepkg-user
