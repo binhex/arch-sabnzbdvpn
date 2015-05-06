@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # define pacman packages
-pacman_packages="python2-pyopenssl python2-feedparser net-tools openvpn"
+pacman_packages="python2-pyopenssl python2-feedparser net-tools openvpn sed grep"
 
 # install pre-reqs
 pacman -Sy --noconfirm
