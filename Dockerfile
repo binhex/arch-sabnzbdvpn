@@ -13,7 +13,7 @@ ADD *.sh /root/
 # add bash script to run openvpn
 ADD apps/root/*.sh /root/
 
-# add bash script to run deluge and privoxy
+# add bash script to run sabnzbd
 ADD apps/nobody/*.sh /home/nobody/
 
 # add pia certificates and sample openvpn.ovpn file
