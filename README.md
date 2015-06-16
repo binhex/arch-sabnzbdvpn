@@ -1,10 +1,11 @@
-SABnzbd + OpenVPN
-==========================
+SABnzbd + OpenVPN + Privoxy
+===========================
 
 SABnzbd - http://sabnzbd.org/
 OpenVPN - https://openvpn.net/
+Privoxy - http://www.privoxy.org/
 
-Latest stable SABnzbd release for Arch Linux, including OpenVPN to tunnel torrent traffic securely (using iptables to block any traffic not bound for tunnel).
+Latest stable SABnzbd release for Arch Linux, including OpenVPN to tunnel torrent traffic securely (using iptables to block any traffic not bound for tunnel). This now also includes Privoxy to allow unfiltered http|https traffic via VPN.
 
 **Pull image**
 
@@ -15,7 +16,7 @@ docker pull binhex/arch-sabnzbdvpn
 **Run container**
 
 ```
-docker run -d --cap-add=NET_ADMIN -p 8080:8080 -p 8090:8090 --name=<container name> -v <path for data files>:/data -v <path for config files>:/config -v /etc/localtime:/etc/localtime:ro -e VPN_ENABLED=<yes|no> -e VPN_USER=<vpn username> -e VPN_PASS=<vpn password> -e VPN_REMOTE=<vpn remote gateway> -e VPN_PORT=<vpn remote port> -e VPN_PROV=<pia|airvpn|custom> binhex/arch-sabnzbdvpn
+docker run -d --cap-add=NET_ADMIN -p 8080:8080 -p 8090:8090 -p 8118:8118 --name=<container name> -v <path for data files>:/data -v <path for config files>:/config -v /etc/localtime:/etc/localtime:ro -e VPN_ENABLED=<yes|no> -e VPN_USER=<vpn username> -e VPN_PASS=<vpn password> -e VPN_REMOTE=<vpn remote gateway> -e VPN_PORT=<vpn remote port> -e VPN_PROV=<pia|airvpn|custom> -e ENABLE_PRIVOXY=<yes|no> binhex/arch-sabnzbdvpn
 ```
 
 Please replace all user variables in the above command defined by <> with the correct values.
@@ -26,6 +27,14 @@ Please replace all user variables in the above command defined by <> with the co
 http://<host ip>:8080
 ```
 
+**Access Privoxy**
+
+```
+<host ip>:8118
+```
+
+Default is no authentication required
+
 **PIA user**
 
 PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOTE (list of gateways https://www.privateinternetaccess.com/pages/client-support/#signup) if you wish to use another remote gateway other than the Netherlands.
@@ -33,7 +42,7 @@ PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOT
 **Example**
 
 ```
-docker run -d --cap-add=NET_ADMIN -p 8080:8080 -p 8090:8090 --name=sabnzbdvpn -v /root/docker/data:/data -v /root/docker/config:/config -v /etc/localtime:/etc/localtime:ro -e VPN_ENABLED=yes -e VPN_USER=myusername -e VPN_PASS=mypassword -e VPN_REMOTE=nl.privateinternetaccess.com -e VPN_PORT=1194 -e VPN_PROV=pia binhex/arch-sabnzbdvpn
+docker run -d --cap-add=NET_ADMIN -p 8080:8080 -p 8090:8090 -p 8118:8118 --name=sabnzbdvpn -v /root/docker/data:/data -v /root/docker/config:/config -v /etc/localtime:/etc/localtime:ro -e VPN_ENABLED=yes -e VPN_USER=myusername -e VPN_PASS=mypassword -e VPN_REMOTE=nl.privateinternetaccess.com -e VPN_PORT=1194 -e VPN_PROV=pia -e ENABLE_PRIVOXY=yes binhex/arch-sabnzbdvpn
 ```
 
 **AirVPN user**
