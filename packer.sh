@@ -16,19 +16,19 @@ echo "%wheel      ALL=(ALL) ALL" >> /etc/sudoers
 echo "Defaults:makepkg-user      !authenticate" >> /etc/sudoers
 
 # download packer
-curl -o /home/makepkg-user/packer.tar.gz https://aur.archlinux.org/packages/pa/packer/packer.tar.gz
+curl -o /home/makepkg-user/packer-color.tar.gz https://aur4.archlinux.org/cgit/aur.git/snapshot/packer-color.tar.gz
 cd /home/makepkg-user
-tar -xvf packer.tar.gz
+su -c "tar -xvf packer-color.tar.gz" - makepkg-user
 
 # install packer
-su -c "cd /home/makepkg-user/packer && makepkg -s --noconfirm --needed" - makepkg-user
-pacman -U /home/makepkg-user/packer/packer*.tar.xz --noconfirm
+su -c "cd /home/makepkg-user/packer-color && makepkg -s --noconfirm --needed" - makepkg-user
+pacman -U /home/makepkg-user/packer-color/packer*.tar.xz --noconfirm
 
-# install app from aur
-su -c "packer -S sabnzbd --noconfirm" - makepkg-user
+# install app using packer
+su -c "packer-color -S $packer_packages --noconfirm" - makepkg-user
 
 # remove base devel tools and packer
-pacman -Ru packer base-devel git --noconfirm
+pacman -Ru packer-color base-devel git --noconfirm
 
 # re-install sed and grep as these packages are removed when uninstalling base-devel
 pacman -S --needed sed grep --noconfirm
