@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# exit script if return code != 0
+set -e
+
 # define pacman packages
 pacman_packages="base-devel"
 
@@ -28,7 +31,7 @@ pacman -U /home/makepkg-user/packer-color/packer*.tar.xz --noconfirm
 su -c "packer-color -S $packer_packages --noconfirm" - makepkg-user
 
 # remove base devel tools and packer
-pacman -Ru packer-color base-devel git --noconfirm
+pacman -Ru base-devel git --noconfirm
 
 # re-install sed and grep as these packages are removed when uninstalling base-devel
 pacman -S --needed sed grep --noconfirm
