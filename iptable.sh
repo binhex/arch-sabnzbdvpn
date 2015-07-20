@@ -33,11 +33,11 @@ iptables -A INPUT -i tun0 -j ACCEPT
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
-# accept input to sabnzbd webui port 8080
+# accept input to sabnzbd http webui port 8080
 iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 
-# accept input to privoxy port 8090
+# accept input to sabnzbd https webui port 8090
 iptables -A INPUT -i eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8090 -j ACCEPT
 
@@ -71,6 +71,10 @@ iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 # accept output to sabnzbd webui port 8080 (used when tunnel down)
 iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
+
+# accept output to sabnzbd webui port 8090 (used when tunnel down)
+iptables -A OUTPUT -o eth0 -p tcp --dport 8090 -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 8090 -j ACCEPT
 
 # accept output to sabnzbd http webui port 8080 (used when tunnel up)
 iptables -t mangle -A OUTPUT -p tcp --dport 8080 -j MARK --set-mark 1
