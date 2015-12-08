@@ -7,13 +7,10 @@ set -e
 pacman_packages="base-devel"
 
 # define packer packages
-packer_packages="par2cmdline-tbb sabnzbd"
+packer_packages="sabnzbd"
 
 # install required pre-reqs for makepkg
 pacman -S --needed $pacman_packages --noconfirm
-
-# remove single threaded par2 (dependancy of sabnzbd)
-pacman -Rs par2cmdline --noconfirm
 
 # create "makepkg-user" user for makepkg
 useradd -m -s /bin/bash makepkg-user
@@ -28,6 +25,9 @@ su -c "tar -xvf packer.tar.gz" - makepkg-user
 # install packer
 su -c "cd /home/makepkg-user/packer && makepkg -s --noconfirm --needed" - makepkg-user
 pacman -U /home/makepkg-user/packer/packer*.tar.xz --noconfirm
+
+# install par2 multithreaded first using packer (cannot bundle with sabnzbd as order means aor single threaded par2 gets installed first)
+su -c "packer -S par2cmdline-tbb --noconfirm" - makepkg-user
 
 # install app using packer
 su -c "packer -S $packer_packages --noconfirm" - makepkg-user
