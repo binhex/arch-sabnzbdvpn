@@ -12,6 +12,9 @@ packer_packages="par2cmdline-tbb sabnzbd"
 # install required pre-reqs for makepkg
 pacman -S --needed $pacman_packages --noconfirm
 
+# remove single threaded par2 (dependancy of sabnzbd)
+pacman -Rs par2cmdline --noconfirm
+
 # create "makepkg-user" user for makepkg
 useradd -m -s /bin/bash makepkg-user
 echo -e "makepkg-password\nmakepkg-password" | passwd makepkg-user
