@@ -30,6 +30,9 @@ iptables -P INPUT DROP
 # accept input to tunnel adapter
 iptables -A INPUT -i tun0 -j ACCEPT
 
+# accept input to/from docker containers (172.x range is internal dhcp)
+iptables -A INPUT -s 172.17.0.0/16 -d 172.17.0.0/16 -j ACCEPT
+
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
@@ -64,6 +67,9 @@ iptables -P OUTPUT DROP
 
 # accept output to tunnel adapter
 iptables -A OUTPUT -o tun0 -j ACCEPT
+
+# accept output to/from docker containers (172.x range is internal dhcp)
+iptables -A OUTPUT -s 172.17.0.0/16 -d 172.17.0.0/16 -j ACCEPT
 
 # accept output to vpn gateway
 iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
