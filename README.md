@@ -37,13 +37,13 @@ docker run -d \
 Please replace all user variables in the above command defined by <> with the correct values.
 
 **Access HTTP Webui**
-http://\<host ip\>:8080
+`http://<host ip>:8080`
 
 **Access HTTPS Webui**
-https://\<host ip\>:8090
+`https://<host ip>:8090`
 
 **Access Privoxy**
-http://\<host ip\>:8118
+`http://<host ip>:8118`
 
 **PIA provider**
 
