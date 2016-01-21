@@ -8,9 +8,13 @@
 
 SABnzbd is an Open Source Binary Newsreader written in Python. It's totally free, incredibly easy to use, and works practically everywhere. SABnzbd makes Usenet as simple and streamlined as possible by automating everything we can. All you have to do is add an .nzb.
 
+This Docker includes OpenVPN to ensure a secure and private connection to the Internet, including use of iptables to prevent IP leakage when the tunnel is down. It also includes Privoxy to allow unfiltered access to index sites, to use Privoxy please point your application at `http://<host ip>:8181`.
+
 **Build notes**
 
-Latest GitHub Release of SABnzbd using Packer to compile, this Docker image incorporates OpenVPN and Privoxy for maximum security.
+Latest stable SABnzbd release from Arch Linux AUR using Packer to compile.
+Latest stable OpenVPN release from Arch Linux repo.
+Latest stable Privoxy release from Arch Linux repo.
 
 **Usage**
 ```
@@ -33,16 +37,14 @@ docker run -d \
 	binhex/arch-sabnzbdvpn
 ```
 
-
 Please replace all user variables in the above command defined by <> with the correct values.
 
-**Access HTTP Webui**
+**Access application**
+
 `http://<host ip>:8080`
 
-**Access HTTPS Webui**
-`https://<host ip>:8090`
-
 **Access Privoxy**
+
 `http://<host ip>:8118`
 
 **PIA provider**
@@ -72,7 +74,6 @@ docker run -d \
 	binhex/arch-sabnzbdvpn
 ```
 
-
 **AirVPN provider**
 
 AirVPN users will need to generate a unique OpenVPN configuration
@@ -101,7 +102,6 @@ docker run -d \
 	-e ENABLE_PRIVOXY=yes \
 	binhex/arch-sabnzbdvpn
 ```
-
 
 **Notes**
 
