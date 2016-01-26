@@ -30,6 +30,7 @@ docker run -d \
 	-e VPN_PASS=<vpn password> \
 	-e VPN_REMOTE=<vpn remote gateway> \
 	-e VPN_PORT=<vpn remote port> \
+	-e VPN_PROTOCOL=<vpn remote protocol> \
 	-e VPN_PROV=<pia|airvpn|custom> \
 	-e ENABLE_PRIVOXY=<yes|no> \
 	binhex/arch-sabnzbdvpn
@@ -67,6 +68,7 @@ docker run -d \
 	-e VPN_PASS=mypassword \
 	-e VPN_REMOTE=nl.privateinternetaccess.com \
 	-e VPN_PORT=1194 \
+	-e VPN_PROTOCOL=udp \
 	-e VPN_PROV=pia \
 	-e ENABLE_PRIVOXY=yes \
 	binhex/arch-sabnzbdvpn
