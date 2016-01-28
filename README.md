@@ -33,6 +33,7 @@ docker run -d \
 	-e VPN_PROTOCOL=<vpn remote protocol> \
 	-e VPN_PROV=<pia|airvpn|custom> \
 	-e ENABLE_PRIVOXY=<yes|no> \
+	-e DEBUG=<true|false> \
 	binhex/arch-sabnzbdvpn
 ```
 
@@ -71,6 +72,7 @@ docker run -d \
 	-e VPN_PROTOCOL=udp \
 	-e VPN_PROV=pia \
 	-e ENABLE_PRIVOXY=yes \
+	-e DEBUG=false \
 	binhex/arch-sabnzbdvpn
 ```
 
@@ -100,6 +102,7 @@ docker run -d \
 	-e VPN_ENABLED=yes \
 	-e VPN_PROV=airvpn \
 	-e ENABLE_PRIVOXY=yes \
+	-e DEBUG=false \
 	binhex/arch-sabnzbdvpn
 ```
 
@@ -107,4 +110,4 @@ docker run -d \
 
 N/A
 
-[Support forum](http://lime-technology.com/forum/index.php?topic=38055.0)
+[Support forum](http://lime-technology.com/forum/index.php?topic=45811.0)
