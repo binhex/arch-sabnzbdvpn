@@ -111,36 +111,34 @@ iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 # if iptable mangle is available (kernel module) then use mark
 if [[ $iptable_mangle_exit_code == 0 ]]; then
 
-	# accept output from sabnzbd webui port 8080 (use mark to force connection over eth0 when tun up)
+	# accept output from sabnzbd webui port 8080 - used for external access
 	iptables -t mangle -A OUTPUT -p tcp --dport 8080 -j MARK --set-mark 1
 	iptables -t mangle -A OUTPUT -p tcp --sport 8080 -j MARK --set-mark 1
 
-	# accept output from sabnzbd webui port 8090 (use mark to force connection over eth0 when tun up)
+	# accept output from sabnzbd webui port 8090 - used for external access
 	iptables -t mangle -A OUTPUT -p tcp --dport 8090 -j MARK --set-mark 2
 	iptables -t mangle -A OUTPUT -p tcp --sport 8090 -j MARK --set-mark 2
 
-	# accept output from privoxy port 8118 if enabled (use mark to force connection over eth0 when tun up)
+	# accept output from privoxy port 8118 if enabled - used for external access
 	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
 		iptables -t mangle -A OUTPUT -p tcp --dport 8118 -j MARK --set-mark 3
 		iptables -t mangle -A OUTPUT -p tcp --sport 8118 -j MARK --set-mark 3
 	fi
 	
-else
+fi
 
-	# accept output from sabnzbd webui port 8080
-	iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
-	iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
+# accept output from sabnzbd webui port 8080 - used for lan access
+iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 
-	# accept output from sabnzbd webui port 8090
-	iptables -A OUTPUT -o eth0 -p tcp --dport 8090 -j ACCEPT
-	iptables -A OUTPUT -o eth0 -p tcp --sport 8090 -j ACCEPT
+# accept output from sabnzbd webui port 8090 - used for lan access
+iptables -A OUTPUT -o eth0 -p tcp --dport 8090 -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 8090 -j ACCEPT
 
-	# accept output from privoxy port 8118
-	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
-		iptables -A OUTPUT -o eth0 -p tcp --dport 8118 -j ACCEPT
-		iptables -A OUTPUT -o eth0 -p tcp --sport 8118 -j ACCEPT
-	fi
-
+# accept output from privoxy port 8118 if enabled - used for lan access
+if [[ $ENABLE_PRIVOXY == "yes" ]]; then
+	iptables -A OUTPUT -o eth0 -p tcp --dport 8118 -j ACCEPT
+	iptables -A OUTPUT -o eth0 -p tcp --sport 8118 -j ACCEPT
 fi
 
 # accept output for dns lookup
