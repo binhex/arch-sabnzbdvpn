@@ -1,23 +1,21 @@
 #!/bin/bash
 
-# setup route for sabnzbd http webui using set-mark to route traffic for port 8080 to eth0
-echo "8080    webui_http" >> /etc/iproute2/rt_tables
-ip rule add fwmark 1 table webui_http
-ip route add default via $DEFAULT_GATEWAY table webui_http
+# ip route
+###
 
-# setup route for sabnzbd https webui using set-mark to route traffic for port 8090 to eth0
-echo "8090    webui_https" >> /etc/iproute2/rt_tables
-ip rule add fwmark 2 table webui_https
-ip route add default via $DEFAULT_GATEWAY table webui_https
+if [[ ! -z "${LAN_NETWORK}" ]]; then
 
-# setup route for privoxy using set-mark to route traffic for port 8118 to eth0
-if [[ $ENABLE_PRIVOXY == "yes" ]]; then
-	echo "8118    privoxy" >> /etc/iproute2/rt_tables
-	ip rule add fwmark 3 table privoxy
-	ip route add default via $DEFAULT_GATEWAY table privoxy
+	echo "[info] Adding ${LAN_NETWORK} as route via docker eth0"
+	ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
+
+else
+
+	echo "[crit] LAN network not defined, please specify via env variable LAN_NETWORK" && exit 1
+
 fi
 
-echo "[info] ip routing table"
+echo "[info] ip route defined as follows..."
+echo "--------------------"
 ip route
 echo "--------------------"
 
@@ -36,11 +34,11 @@ iptables -A INPUT -s 172.17.0.0/16 -d 172.17.0.0/16 -j ACCEPT
 # accept input to vpn gateway
 iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 
-# accept input to sabnzbd http webui port 8080
+# accept input to deluge webui port 8080
 iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 
-# accept input to sabnzbd https webui port 8090
+# accept input to deluge webui port 8090
 iptables -A INPUT -i eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8090 -j ACCEPT
 
@@ -65,57 +63,39 @@ iptables -A INPUT -i lo -j ACCEPT
 # set policy to drop for output
 iptables -P OUTPUT DROP
 
-# accept output to tunnel adapter
+# accept output from tunnel adapter
 iptables -A OUTPUT -o tun0 -j ACCEPT
 
 # accept output to/from docker containers (172.x range is internal dhcp)
 iptables -A OUTPUT -s 172.17.0.0/16 -d 172.17.0.0/16 -j ACCEPT
 
-# accept output to vpn gateway
+# accept output from vpn gateway
 iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
 
-# accept output to sabnzbd webui port 8080 (used when tunnel down)
+# accept output from deluge webui port 8080
 iptables -A OUTPUT -o eth0 -p tcp --dport 8080 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 
-# accept output to sabnzbd webui port 8090 (used when tunnel down)
+# accept output from deluge webui port 8090
 iptables -A OUTPUT -o eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 8090 -j ACCEPT
 
-# accept output to sabnzbd http webui port 8080 (used when tunnel up)
-iptables -t mangle -A OUTPUT -p tcp --dport 8080 -j MARK --set-mark 1
-iptables -t mangle -A OUTPUT -p tcp --sport 8080 -j MARK --set-mark 1
-
-# accept output to sabnzbd https webui port 8090 (used when tunnel up)
-iptables -t mangle -A OUTPUT -p tcp --dport 8090 -j MARK --set-mark 2
-iptables -t mangle -A OUTPUT -p tcp --sport 8090 -j MARK --set-mark 2
-
-# accept output to privoxy port 8118 if enabled
+# accept output from privoxy port 8118
 if [[ $ENABLE_PRIVOXY == "yes" ]]; then
-	iptables -t mangle -A OUTPUT -p tcp --dport 8118 -j MARK --set-mark 3
-	iptables -t mangle -A OUTPUT -p tcp --sport 8118 -j MARK --set-mark 3
+	iptables -A OUTPUT -o eth0 -p tcp --dport 8118 -j ACCEPT
+	iptables -A OUTPUT -o eth0 -p tcp --sport 8118 -j ACCEPT
 fi
 
-# accept output dns lookup
+# accept output for dns lookup
 iptables -A OUTPUT -p udp --dport 53 -j ACCEPT
 
-# accept output icmp (ping)
+# accept output for icmp (ping)
 iptables -A OUTPUT -p icmp --icmp-type echo-request -j ACCEPT
 
-# accept output to local loopback
+# accept output from local loopback adapter
 iptables -A OUTPUT -o lo -j ACCEPT
 
-echo "[info] iptables"
+echo "[info] iptables defined as follows..."
+echo "--------------------"
 iptables -S
 echo "--------------------"
-
-# add in google public nameservers (isp may block ns lookup when connected to vpn)
-echo 'nameserver 8.8.8.8' > /etc/resolv.conf
-echo 'nameserver 8.8.4.4' >> /etc/resolv.conf
-
-echo "[info] nameservers"
-cat /etc/resolv.conf
-echo "--------------------"
-
-# start openvpn tunnel
-source /root/openvpn.sh
