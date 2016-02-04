@@ -27,7 +27,16 @@ echo "--------------------"
 lsmod | grep "iptable_mangle" > /dev/null
 iptable_mangle_exit_code=$?
 
-# if iptable_mangle is available (kernel module) then set mark
+# if iptable_mangle is not available then attempt to load module
+if [[ $iptable_mangle_exit_code != 0 ]]; then
+
+	# attempt to load module
+	echo "[info] iptable_mangle module not supported, attempting to load..."
+	modprobe iptable_mangle > /dev/null
+	iptable_mangle_exit_code=$?
+fi
+
+# if iptable_mangle is available then set fwmark
 if [[ $iptable_mangle_exit_code == 0 ]]; then
 
 	echo "[info] iptable_mangle support detected, adding fwmark for tables"
@@ -37,7 +46,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 	ip rule add fwmark 1 table webui_http
 	ip route add default via $DEFAULT_GATEWAY table webui_http
 
-		# setup route for sabnzbd webui https using set-mark to route traffic for port 8090 to eth0
+	# setup route for sabnzbd webui https using set-mark to route traffic for port 8090 to eth0
 	echo "8090    webui_https" >> /etc/iproute2/rt_tables
 	ip rule add fwmark 2 table webui_https
 	ip route add default via $DEFAULT_GATEWAY table webui_https
