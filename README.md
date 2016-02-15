@@ -4,7 +4,7 @@
 [OpenVPN](https://openvpn.net/)  
 [Privoxy](http://www.privoxy.org/)
 
-**Application description**
+**Description**
 
 SABnzbd is an Open Source Binary Newsreader written in Python. It's totally free, incredibly easy to use, and works practically everywhere. SABnzbd makes Usenet as simple and streamlined as possible by automating everything we can. All you have to do is add an .nzb. This Docker includes OpenVPN to ensure a secure and private connection to the Internet, including use of iptables to prevent IP leakage when the tunnel is down. It also includes Privoxy to allow unfiltered access to index sites, to use Privoxy please point your application at `http://<host ip>:8181`.
 
@@ -17,25 +17,27 @@ Latest stable Privoxy release from Arch Linux repo.
 **Usage**
 ```
 docker run -d \
-	--cap-add=NET_ADMIN \
-	-p 8080:8080 \
-	-p 8090:8090 \
-	-p 8118:8118 \
-	--name=<container name> \
-	-v <path for data files>:/data \
-	-v <path for config files>:/config \
-	-v /etc/localtime:/etc/localtime:ro \
-	-e VPN_ENABLED=<yes|no> \
-	-e VPN_USER=<vpn username> \
-	-e VPN_PASS=<vpn password> \
-	-e VPN_REMOTE=<vpn remote gateway> \
-	-e VPN_PORT=<vpn remote port> \
-	-e VPN_PROTOCOL=<vpn remote protocol> \
-	-e VPN_PROV=<pia|airvpn|custom> \
-	-e ENABLE_PRIVOXY=<yes|no> \
-	-e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
-	-e DEBUG=<true|false> \
-	binhex/arch-sabnzbdvpn
+    --cap-add=NET_ADMIN \
+    -p 8080:8080 \
+    -p 8090:8090 \
+    -p 8118:8118 \
+    --name=<container name> \
+    -v <path for data files>:/data \
+    -v <path for config files>:/config \
+    -v /etc/localtime:/etc/localtime:ro \
+    -e VPN_ENABLED=<yes|no> \
+    -e VPN_USER=<vpn username> \
+    -e VPN_PASS=<vpn password> \
+    -e VPN_REMOTE=<vpn remote gateway> \
+    -e VPN_PORT=<vpn remote port> \
+    -e VPN_PROTOCOL=<vpn remote protocol> \
+    -e VPN_PROV=<pia|airvpn|custom> \
+    -e ENABLE_PRIVOXY=<yes|no> \
+    -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
+    -e DEBUG=<true|false> \
+    -e UID=<uid for user> \
+    -e GID=<gid for user> \
+    binhex/arch-sabnzbdvpn
 ```
 
 Please replace all user variables in the above command defined by <> with the correct values.
@@ -57,25 +59,27 @@ if you wish to use another remote gateway other than the Netherlands.
 **PIA example**
 ```
 docker run -d \
-	--cap-add=NET_ADMIN \
-	-p 8080:8080 \
-	-p 8090:8090 \
-	-p 8118:8118 \
-	--name=sabnzbdvpn \
-	-v /root/docker/data:/data \
-	-v /root/docker/config:/config \
-	-v /etc/localtime:/etc/localtime:ro \
-	-e VPN_ENABLED=yes \
-	-e VPN_USER=myusername \
-	-e VPN_PASS=mypassword \
-	-e VPN_REMOTE=nl.privateinternetaccess.com \
-	-e VPN_PORT=1194 \
-	-e VPN_PROTOCOL=udp \
-	-e VPN_PROV=pia \
-	-e ENABLE_PRIVOXY=yes \
-	-e LAN_NETWORK=192.168.1.0/24 \
-	-e DEBUG=false \
-	binhex/arch-sabnzbdvpn
+    --cap-add=NET_ADMIN \
+    -p 8080:8080 \
+    -p 8090:8090 \
+    -p 8118:8118 \
+    --name=sabnzbdvpn \
+    -v /root/docker/data:/data \
+    -v /root/docker/config:/config \
+    -v /etc/localtime:/etc/localtime:ro \
+    -e VPN_ENABLED=yes \
+    -e VPN_USER=myusername \
+    -e VPN_PASS=mypassword \
+    -e VPN_REMOTE=nl.privateinternetaccess.com \
+    -e VPN_PORT=1194 \
+    -e VPN_PROTOCOL=udp \
+    -e VPN_PROV=pia \
+    -e ENABLE_PRIVOXY=yes \
+    -e LAN_NETWORK=192.168.1.0/24 \
+    -e DEBUG=false \
+    -e UID=0 \
+    -e GID=0 \
+    binhex/arch-sabnzbdvpn
 ```
 
 **AirVPN provider**
@@ -93,24 +97,30 @@ file by using the following link https://airvpn.org/generator/
 **AirVPN example**
 ```
 docker run -d \
-	--cap-add=NET_ADMIN \
-	-p 8080:8080 \
-	-p 8090:8090 \
-	-p 8118:8118 \
-	--name=sabnzbdvpn \
-	-v /root/docker/data:/data \
-	-v /root/docker/config:/config \
-	-v /etc/localtime:/etc/localtime:ro \
-	-e VPN_ENABLED=yes \
-	-e VPN_PROV=airvpn \
-	-e ENABLE_PRIVOXY=yes \
-	-e LAN_NETWORK=192.168.1.0/24 \
-	-e DEBUG=false \
-	binhex/arch-sabnzbdvpn
+    --cap-add=NET_ADMIN \
+    -p 8080:8080 \
+    -p 8090:8090 \
+    -p 8118:8118 \
+    --name=sabnzbdvpn \
+    -v /root/docker/data:/data \
+    -v /root/docker/config:/config \
+    -v /etc/localtime:/etc/localtime:ro \
+    -e VPN_ENABLED=yes \
+    -e VPN_PROV=airvpn \
+    -e ENABLE_PRIVOXY=yes \
+    -e LAN_NETWORK=192.168.1.0/24 \
+    -e DEBUG=false \
+    -e UID=0 \
+    -e GID=0 \
+    binhex/arch-sabnzbdvpn
 ```
 
 **Notes**
 
-N/A
+User ID (UID) and Group ID (GID) can be found by issuing the following command for the user you want to run the container as:-
+
+```
+id <username>
+```
 
 [Support forum](http://lime-technology.com/forum/index.php?topic=45822.0)

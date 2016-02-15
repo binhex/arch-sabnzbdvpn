@@ -83,7 +83,7 @@ iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 
-# accept input to sabnzbd webui port 8080
+# accept input to sabnzbd webui port 8090
 iptables -A INPUT -i eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8090 -j ACCEPT
 
