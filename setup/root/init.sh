@@ -38,8 +38,8 @@ else
 fi
 
 # set permissions inside container
-chown -R "${UID}":"${GID}" /opt/sabnzbd /usr/bin/privoxy /etc/privoxy
-chmod -R 775 /opt/sabnzbd /usr/bin/privoxy /etc/privoxy
+chown -R "${UID}":"${GID}" /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
+chmod -R 775 /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
 
 echo "[info] Starting Supervisor..."
 
