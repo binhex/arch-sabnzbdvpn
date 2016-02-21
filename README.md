@@ -35,8 +35,8 @@ docker run -d \
     -e ENABLE_PRIVOXY=<yes|no> \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
     -e DEBUG=<true|false> \
-    -e UID=<uid for user> \
-    -e GID=<gid for user> \
+    -e PUID=<uid for user> \
+    -e PGID=<gid for user> \
     binhex/arch-sabnzbdvpn
 ```
 
@@ -77,8 +77,8 @@ docker run -d \
     -e ENABLE_PRIVOXY=yes \
     -e LAN_NETWORK=192.168.1.0/24 \
     -e DEBUG=false \
-    -e UID=0 \
-    -e GID=0 \
+    -e PUID=0 \
+    -e PGID=0 \
     binhex/arch-sabnzbdvpn
 ```
 
@@ -110,14 +110,14 @@ docker run -d \
     -e ENABLE_PRIVOXY=yes \
     -e LAN_NETWORK=192.168.1.0/24 \
     -e DEBUG=false \
-    -e UID=0 \
-    -e GID=0 \
+    -e PUID=0 \
+    -e PGID=0 \
     binhex/arch-sabnzbdvpn
 ```
 
 **Notes**
 
-User ID (UID) and Group ID (GID) can be found by issuing the following command for the user you want to run the container as:-
+User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
 
 ```
 id <username>
