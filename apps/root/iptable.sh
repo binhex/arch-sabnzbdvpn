@@ -27,6 +27,10 @@ echo "--------------------"
 lsmod | grep "iptable_mangle" > /dev/null
 iptable_mangle_exit_code=$?
 
+if [[ "${DEBUG}" == "true" ]]; then
+	echo "[debug] Modules currently loaded for kernel" ; lsmod
+fi
+
 # if iptable_mangle is not available then attempt to load module
 if [[ $iptable_mangle_exit_code != 0 ]]; then
 
@@ -133,7 +137,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 		iptables -t mangle -A OUTPUT -p tcp --dport 8118 -j MARK --set-mark 3
 		iptables -t mangle -A OUTPUT -p tcp --sport 8118 -j MARK --set-mark 3
 	fi
-	
+
 fi
 
 # accept output from sabnzbd webui port 8080 - used for lan access
