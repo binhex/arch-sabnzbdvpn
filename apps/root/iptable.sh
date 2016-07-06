@@ -1,12 +1,31 @@
 #!/bin/bash
 
+# check for presence of network interface docker0
+check_network=$(ifconfig | grep docker0)
+
+# if network interface docker0 is present then we are running in host mode and thus must exit
+if [[ ! -z "${check_network}" ]]; then
+	echo "[crit] Network type detected as 'Host', this will cause major issues, please stop the container and switch back to 'Bridge' mode" && exit 1
+fi
+
 # ip route
 ###
 
 if [[ ! -z "${LAN_NETWORK}" ]]; then
 
-	echo "[info] Adding ${LAN_NETWORK} as route via docker eth0"
-	ip route add "${LAN_NETWORK}" via "${DEFAULT_GATEWAY}" dev eth0
+	# split comma seperated string into list from LAN_NETWORK env variable
+	IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
+
+	# process lan networks in the list
+	for lan_network_item in "${lan_network_list[@]}"; do
+
+		# strip whitespace from start and end of lan_network_item
+		lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+
+		echo "[info] Adding ${lan_network_item} as route via docker eth0"
+		ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY}" dev eth0
+
+	done
 
 else
 
@@ -64,7 +83,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 
 else
 
-	echo "[warn] iptable_mangle module not supported, you will not be able to connect to SABnzbd webui or Privoxy outside of your LAN"
+	echo "[warn] iptable_mangle module not supported, you will not be able to connect to Deluge webui or Privoxy outside of your LAN"
 
 fi
 
@@ -90,6 +109,10 @@ iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 # accept input to sabnzbd webui port 8090
 iptables -A INPUT -i eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8090 -j ACCEPT
+
+# accept input to script (sabToSickBeard) port 8081
+iptables -A INPUT -i eth0 -p tcp --dport 8081 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --sport 8081 -j ACCEPT
 
 # accept input to privoxy port 8118 if enabled
 if [[ $ENABLE_PRIVOXY == "yes" ]]; then
@@ -132,7 +155,7 @@ if [[ $iptable_mangle_exit_code == 0 ]]; then
 	iptables -t mangle -A OUTPUT -p tcp --dport 8090 -j MARK --set-mark 2
 	iptables -t mangle -A OUTPUT -p tcp --sport 8090 -j MARK --set-mark 2
 
-	# accept output from privoxy port 8118 if enabled - used for external access
+	# accept output from privoxy port 8118 - used for external access
 	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
 		iptables -t mangle -A OUTPUT -p tcp --dport 8118 -j MARK --set-mark 3
 		iptables -t mangle -A OUTPUT -p tcp --sport 8118 -j MARK --set-mark 3
@@ -148,7 +171,11 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 8090 -j ACCEPT
 
-# accept output from privoxy port 8118 if enabled - used for lan access
+# accept output from script (sabToSickBeard) port 8081 - used for lan access
+iptables -A OUTPUT -o eth0 -p tcp --dport 8081 -j ACCEPT
+iptables -A OUTPUT -o eth0 -p tcp --sport 8081 -j ACCEPT
+
+# accept output from privoxy port 8118 - used for lan access
 if [[ $ENABLE_PRIVOXY == "yes" ]]; then
 	iptables -A OUTPUT -o eth0 -p tcp --dport 8118 -j ACCEPT
 	iptables -A OUTPUT -o eth0 -p tcp --sport 8118 -j ACCEPT
