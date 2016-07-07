@@ -110,9 +110,27 @@ iptables -A INPUT -i eth0 -p tcp --sport 8080 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i eth0 -p tcp --sport 8090 -j ACCEPT
 
-# accept input to script (sabToSickBeard) port 8081
-iptables -A INPUT -i eth0 -p tcp --dport 8081 -j ACCEPT
-iptables -A INPUT -i eth0 -p tcp --sport 8081 -j ACCEPT
+# additional port list for scripts
+if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
+
+	# split comma seperated string into list from ADDITIONAL_PORTS env variable
+	IFS=',' read -ra additional_port_list <<< "${ADDITIONAL_PORTS}"
+
+	# process additional ports in the list
+	for additional_port_item in "${additional_port_list[@]}"; do
+
+		# strip whitespace from start and end of additional_port_item
+		additional_port_item=$(echo "${additional_port_item}" | sed -e 's/^[ \t]*//')
+
+		echo "[info] Adding additional incoming port ${additional_port_item} for eth0"
+
+		# accept input to additional port for eth0
+		iptables -A INPUT -i eth0 -p tcp --dport "${additional_port_item}" -j ACCEPT
+		iptables -A INPUT -i eth0 -p tcp --sport "${additional_port_item}" -j ACCEPT
+
+	done
+
+fi
 
 # accept input to privoxy port 8118 if enabled
 if [[ $ENABLE_PRIVOXY == "yes" ]]; then
@@ -171,9 +189,27 @@ iptables -A OUTPUT -o eth0 -p tcp --sport 8080 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --dport 8090 -j ACCEPT
 iptables -A OUTPUT -o eth0 -p tcp --sport 8090 -j ACCEPT
 
-# accept output from script (sabToSickBeard) port 8081 - used for lan access
-iptables -A OUTPUT -o eth0 -p tcp --dport 8081 -j ACCEPT
-iptables -A OUTPUT -o eth0 -p tcp --sport 8081 -j ACCEPT
+# additional port list for scripts
+if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
+
+	# split comma seperated string into list from ADDITIONAL_PORTS env variable
+	IFS=',' read -ra additional_port_list <<< "${ADDITIONAL_PORTS}"
+
+	# process additional ports in the list
+	for additional_port_item in "${additional_port_list[@]}"; do
+
+		# strip whitespace from start and end of additional_port_item
+		additional_port_item=$(echo "${additional_port_item}" | sed -e 's/^[ \t]*//')
+
+		echo "[info] Adding additional outgoing port ${additional_port_item} for eth0"
+
+		# accept output to additional port for eth0
+		iptables -A OUTPUT -o eth0 -p tcp --dport "${additional_port_item}" -j ACCEPT
+		iptables -A OUTPUT -o eth0 -p tcp --sport "${additional_port_item}" -j ACCEPT
+
+	done
+
+fi
 
 # accept output from privoxy port 8118 - used for lan access
 if [[ $ENABLE_PRIVOXY == "yes" ]]; then

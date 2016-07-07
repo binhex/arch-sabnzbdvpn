@@ -34,6 +34,7 @@ docker run -d \
     -e VPN_PROV=<pia|airvpn|custom> \
     -e ENABLE_PRIVOXY=<yes|no> \
     -e LAN_NETWORK=<lan ipv4 network>/<cidr notation> \
+    -e ADDITIONAL_PORTS=<comma seperated list of ports> \
     -e DEBUG=<true|false> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
@@ -76,6 +77,7 @@ docker run -d \
     -e VPN_PROV=pia \
     -e ENABLE_PRIVOXY=yes \
     -e LAN_NETWORK=192.168.1.0/24 \
+    -e ADDITIONAL_PORTS=8081 \
     -e DEBUG=false \
     -e PUID=0 \
     -e PGID=0 \
@@ -109,6 +111,7 @@ docker run -d \
     -e VPN_PROV=airvpn \
     -e ENABLE_PRIVOXY=yes \
     -e LAN_NETWORK=192.168.1.0/24 \
+    -e ADDITIONAL_PORTS=8081 \
     -e DEBUG=false \
     -e PUID=0 \
     -e PGID=0 \
@@ -122,6 +125,8 @@ User ID (PUID) and Group ID (PGID) can be found by issuing the following command
 ```
 id <username>
 ```
+
+The ADDITIONAL_PORTS environment variable is used to define ports that might be required for scripts run inside the container, if you want to define multiple ports then please use a comma to seperate values.
 ___
 If you appreciate my work, then please consider buying me a beer  :D
 
