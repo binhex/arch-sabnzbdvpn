@@ -72,7 +72,7 @@ docker run -d \
     -e VPN_USER=myusername \
     -e VPN_PASS=mypassword \
     -e VPN_REMOTE=nl.privateinternetaccess.com \
-    -e VPN_PORT=1194 \
+    -e VPN_PORT=1198 \
     -e VPN_PROTOCOL=udp \
     -e VPN_PROV=pia \
     -e ENABLE_PRIVOXY=yes \
