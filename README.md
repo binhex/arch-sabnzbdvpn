@@ -54,9 +54,7 @@ Please replace all user variables in the above command defined by <> with the co
 
 **PIA provider**
 
-PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOTE 
-(list of gateways https://www.privateinternetaccess.com/pages/client-support/#signup) 
-if you wish to use another remote gateway other than the Netherlands.
+PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOTE (list of gateways https://www.privateinternetaccess.com/pages/client-support) if you wish to use another remote gateway other than the Netherlands.
 
 **PIA example**
 ```
@@ -110,7 +108,7 @@ docker run -d \
     -v /root/docker/config:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e VPN_ENABLED=yes \
-	-e VPN_REMOTE=example.airvpn.org \
+    -e VPN_REMOTE=nl.vpn.airdns.org \
     -e VPN_PORT=443 \
     -e VPN_PROTOCOL=udp \
     -e VPN_PROV=airvpn \
