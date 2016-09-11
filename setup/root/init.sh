@@ -3,6 +3,8 @@
 # exit script if return code != 0
 set -e
 
+echo "[info] Starting Docker container..."
+
 # if uid not specified then use default uid for user nobody 
 if [[ -z "${PUID}" ]]; then
 	PUID="99"
@@ -27,6 +29,7 @@ if [[ ! -f "/config/perms.txt" ]]; then
 
 	# set permissions for /config and /data volume mapping
 	echo "[info] Setting permissions recursively on /config and /data..."
+	echo "[warn] !!IMPORTANT!! This can take several minutes, please do NOT stop the container."
 	chown -R "${PUID}":"${PGID}" /config /data
 	chmod -R 775 /config /data
 	echo "This file prevents permissions from being applied/re-applied to /config, if you want to reset permissions then please delete this file and restart the container." > /config/perms.txt
@@ -44,4 +47,4 @@ chmod -R 775 /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
 echo "[info] Starting Supervisor..."
 
 # run supervisor
-"/usr/bin/supervisord" -c "/etc/supervisor.conf" -n
+exec /usr/bin/supervisord -c /etc/supervisor.conf -n
