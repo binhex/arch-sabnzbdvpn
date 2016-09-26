@@ -23,6 +23,9 @@ su -c "tar -xvf $aur_helper.tar.gz" - makepkg-user
 su -c "cd /home/makepkg-user/$aur_helper && makepkg -s --noconfirm --needed" - makepkg-user
 pacman -U /home/makepkg-user/$aur_helper/packer*.pkg.tar.xz --noconfirm
 
+# install app using aur helper (seperate due to conflict with par2cmdline
+su -c "$aur_helper -S par2cmdline-tbb --noconfirm" - makepkg-user
+
 # install app using aur helper
 su -c "$aur_helper -S $aur_packages --noconfirm" - makepkg-user
 
