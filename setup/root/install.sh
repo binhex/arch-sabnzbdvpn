@@ -36,6 +36,9 @@ cat <<EOF >> /root/init.sh
 chown -R "${PUID}":"${PGID}" /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
 chmod -R 775 /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
 
+# restore stdout/stderr (to prevent duplicate logging from supervisor)
+exec 1>&3 2>&4
+
 echo "[info] Starting Supervisor..."
 
 # run supervisor
