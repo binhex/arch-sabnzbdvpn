@@ -13,7 +13,7 @@ else
 
 	echo "[info] VPN is enabled, checking VPN tunnel local ip is valid"
 
-	# run script to check ip is valid for tun0
+	# run script to check ip is valid for tunnel device
 	source /home/nobody/checkip.sh
 
 	# set triggers to first run

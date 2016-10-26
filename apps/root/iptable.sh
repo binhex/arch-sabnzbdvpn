@@ -1,37 +1,21 @@
 #!/bin/bash
 
-# check for presence of network interface docker0
-check_network=$(ifconfig | grep docker0)
-
-# if network interface docker0 is present then we are running in host mode and thus must exit
-if [[ ! -z "${check_network}" ]]; then
-	echo "[crit] Network type detected as 'Host', this will cause major issues, please stop the container and switch back to 'Bridge' mode" && exit 1
-fi
-
 # ip route
 ###
 
-if [[ ! -z "${LAN_NETWORK}" ]]; then
+# split comma seperated string into list from LAN_NETWORK env variable
+IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
 
-	# split comma seperated string into list from LAN_NETWORK env variable
-	IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
+# process lan networks in the list
+for lan_network_item in "${lan_network_list[@]}"; do
 
-	# process lan networks in the list
-	for lan_network_item in "${lan_network_list[@]}"; do
+	# strip whitespace from start and end of lan_network_item
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
 
-		# strip whitespace from start and end of lan_network_item
-		lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	echo "[info] Adding ${lan_network_item} as route via docker eth0"
+	ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY}" dev eth0
 
-		echo "[info] Adding ${lan_network_item} as route via docker eth0"
-		ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY}" dev eth0
-
-	done
-
-else
-
-	echo "[crit] LAN network not defined, please specify via env variable LAN_NETWORK" && exit 1
-
-fi
+done
 
 echo "[info] ip route defined as follows..."
 echo "--------------------"
@@ -94,7 +78,7 @@ fi
 iptables -P INPUT DROP
 
 # accept input to tunnel adapter
-iptables -A INPUT -i tun0 -j ACCEPT
+iptables -A INPUT -i "${VPN_DEVICE_TYPE}"0 -j ACCEPT
 
 # accept input to/from docker containers (172.x range is internal dhcp)
 iptables -A INPUT -s 172.17.0.0/16 -d 172.17.0.0/16 -j ACCEPT
@@ -154,7 +138,7 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -P OUTPUT DROP
 
 # accept output from tunnel adapter
-iptables -A OUTPUT -o tun0 -j ACCEPT
+iptables -A OUTPUT -o "${VPN_DEVICE_TYPE}"0 -j ACCEPT
 
 # accept output to/from docker containers (172.x range is internal dhcp)
 iptables -A OUTPUT -s 172.17.0.0/16 -d 172.17.0.0/16 -j ACCEPT
