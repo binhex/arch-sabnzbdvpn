@@ -22,28 +22,27 @@ cat <<'EOF' > /tmp/additional_ports_heredoc
         fi
 EOF
 
-# replace placeholder string with contents of file (here doc)
+# replace additional ports placeholder string with contents of file (here doc)
 sed -i '/# ADDITIONAL_PORTS_PLACEHOLDER/{
     s/# ADDITIONAL_PORTS_PLACEHOLDER//g
     r /tmp/additional_ports_heredoc
 }' /root/init.sh
-
 rm /tmp/additional_ports_heredoc
 
-# append here doc to file
-cat <<EOF >> /root/init.sh
+# create file with contets of here doc
+cat <<'EOF' > /tmp/permissions_heredoc
 # set permissions inside container
 chown -R "${PUID}":"${PGID}" /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
 chmod -R 775 /opt/sabnzbd /usr/bin/privoxy /etc/privoxy /home/nobody
 
-# restore stdout/stderr (to prevent duplicate logging from supervisor)
-exec 1>&3 2>&4
-
-echo "[info] Starting Supervisor..."
-
-# run supervisor
-exec /usr/bin/supervisord -c /etc/supervisor.conf -n
 EOF
+
+# replace permissions placeholder string with contents of file (here doc)
+sed -i '/# PERMISSIONS_PLACEHOLDER/{
+    s/# PERMISSIONS_PLACEHOLDER//g
+    r /tmp/permissions_heredoc
+}' /root/init.sh
+rm /tmp/permissions_heredoc
 
 # cleanup
 yes|pacman -Scc
