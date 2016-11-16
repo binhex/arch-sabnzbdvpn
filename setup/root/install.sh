@@ -19,7 +19,7 @@ find /tmp/scripts-master/ -type f -name '*.sh' -exec mv -i {} /root/  \;
 ####
 
 # define pacman packages
-pacman_packages="base-devel git python2-pyopenssl python2-feedparser p7zip"
+pacman_packages="git python2-pyopenssl python2-feedparser p7zip"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
