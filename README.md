@@ -10,7 +10,7 @@ SABnzbd is an Open Source Binary Newsreader written in Python. It's totally free
 
 **Build notes**
 
-Latest stable SABnzbd release from Arch Linux AUR using Packer to compile.
+Latest stable SABnzbd release from Arch Linux AUR.
 Latest stable OpenVPN release from Arch Linux repo.
 Latest stable Privoxy release from Arch Linux repo.
 
