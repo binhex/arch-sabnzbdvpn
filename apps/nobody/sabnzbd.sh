@@ -1,29 +1,35 @@
 #!/bin/bash
 
 # if vpn set to "no" then don't run openvpn
-if [[ $VPN_ENABLED == "no" ]]; then
+if [[ "${VPN_ENABLED}" == "no" ]]; then
 
 	echo "[info] VPN not enabled, skipping VPN tunnel local ip checks"
 
-	# run sabnzbd daemon (non daemonized, blocking)
-	echo "[info] All checks complete, starting SABnzbd..."
+	# run sabnzbd (non daemonized, blocking)
+	echo "[info] Attempting to start SABnzbd..."
 	/usr/sbin/python2 /opt/sabnzbd/SABnzbd.py --config-file /config --server 0.0.0.0:8080 --https 8090
-	
+
 else
 
 	echo "[info] VPN is enabled, checking VPN tunnel local ip is valid"
 
 	# run script to check ip is valid for tunnel device
-	source /home/nobody/checkip.sh
+	source /home/nobody/checkvpnip.sh
 
 	# set triggers to first run
-	first_run="true"
+	sabnzbd_running="false"
 
-	# set sleep period for recheck (in mins)
-	sleep_period="10"
-
-	# while loop to check ip and port
+	# remove previously run pid file (if it exists)
+	rm -f /home/nobody/downloader.sleep.pid
+	
+	# while loop to check ip
 	while true; do
+
+		# write the current session's pid to file (used to kill sleep process if sabnzbd/openvpn terminates)
+		echo $$ > /home/nobody/downloader.sleep.pid
+
+		# run script to check ip is valid for tunnel device (will block until valid)
+		source /home/nobody/checkvpnip.sh
 
 		# run scripts to identity vpn ip
 		source /home/nobody/getvpnip.sh
@@ -31,47 +37,48 @@ else
 		# if vpn_ip is not blank then run, otherwise log warning
 		if [[ ! -z "${vpn_ip}" ]]; then
 
-			# check sabnzbd is running, if not then set to first_run and reload
-			if ! pgrep sabnzbd > /dev/null; then
+			# check if sabnzbd is running, if not then skip reconfigure for ip
+			if ! pgrep -f /usr/sbin/python2 > /dev/null; then
 
-				echo "[info] SABnzbd daemon not running, marking as first run"
+				echo "[info] SABnzbd not running"
 
-				# mark as first run and reload required due to sabnzbd not running
-				first_run="true"
+				# mark as sabnzbd not running
+				sabnzbd_running="false"
+
+			else
+
+				# if sabnzbd is running, then reconfigure ip
+				sabnzbd_running="true"
 
 			fi
 
-			if [[ $first_run == "true" ]]; then
+			if [[ "${sabnzbd_running}" == "false" ]]; then
 
-				echo "[info] All checks complete, starting SABnzbd..."
+				echo "[info] Attempting to start SABnzbd..."
 
-				# run sabnzbd daemon (daemonized, non-blocking)
+				# run sabnzbd (daemonized, non-blocking)
 				/usr/sbin/python2 /opt/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
+
+				echo "[info] SABnzbd started"
 
 			fi
 
 			# reset triggers to negative values
-			first_run="false"
+			sabnzbd_running="false"
 
 			if [[ "${DEBUG}" == "true" ]]; then
 
-				echo "[debug] VPN IP is $vpn_ip"
+				echo "[debug] VPN IP is ${vpn_ip}"
 
 			fi
 
 		else
 
-			echo "[warn] VPN IP not detected"
+			echo "[warn] VPN IP not detected, VPN tunnel maybe down"
 
 		fi
 
-		if [[ "${DEBUG}" == "true" ]]; then
-
-			echo "[debug] Sleeping for ${sleep_period} mins before rechecking"
-
-		fi
-
-		sleep "${sleep_period}"m
+		sleep 30s
 
 	done
 
