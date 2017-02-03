@@ -14,7 +14,7 @@ else
 	echo "[info] VPN is enabled, checking VPN tunnel local ip is valid"
 
 	# run script to check ip is valid for tunnel device
-	source /home/nobody/checkvpnip.sh
+	source /home/nobody/getvpnip.sh
 
 	# set triggers to first run
 	sabnzbd_running="false"
@@ -29,9 +29,6 @@ else
 		echo $$ > /home/nobody/downloader.sleep.pid
 
 		# run script to check ip is valid for tunnel device (will block until valid)
-		source /home/nobody/checkvpnip.sh
-
-		# run scripts to identity vpn ip
 		source /home/nobody/getvpnip.sh
 
 		# if vpn_ip is not blank then run, otherwise log warning
