@@ -35,7 +35,7 @@ else
 		if [[ ! -z "${vpn_ip}" ]]; then
 
 			# check if sabnzbd is running, if not then skip reconfigure for ip
-			if ! pgrep -f /usr/sbin/python2 > /dev/null; then
+			if ! pgrep -x python2 > /dev/null; then
 
 				echo "[info] SABnzbd not running"
 
