@@ -16,14 +16,8 @@ else
 	# set triggers to first run
 	sabnzbd_running="false"
 
-	# remove previously run pid file (if it exists)
-	rm -f /home/nobody/downloader.sleep.pid
-	
 	# while loop to check ip
 	while true; do
-
-		# write the current session's pid to file (used to kill sleep process if sabnzbd/openvpn terminates)
-		echo $$ > /home/nobody/downloader.sleep.pid
 
 		# run script to check ip is valid for tunnel device (will block until valid)
 		source /home/nobody/getvpnip.sh
