@@ -38,11 +38,8 @@ source /root/aor.sh
 # aur packages
 ####
 
-# define aur helper
-aur_helper="apacman"
-
 # define aur packages
-aur_packages="par2cmdline-tbb sabnzbd"
+aur_packages="sabnzbd"
 
 # call aur install script (arch user repo)
 source /root/aur.sh
