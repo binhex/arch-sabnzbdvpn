@@ -40,6 +40,7 @@ docker run -d \
     -e NAME_SERVERS=<name server ip(s)> \
     -e ADDITIONAL_PORTS=<port number(s)> \
     -e DEBUG=<true|false> \
+    -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
     binhex/arch-sabnzbdvpn
@@ -84,6 +85,7 @@ docker run -d \
     -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
     -e ADDITIONAL_PORTS=8081 \
     -e DEBUG=false \
+    -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
     binhex/arch-sabnzbdvpn
@@ -123,6 +125,7 @@ docker run -d \
     -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
     -e ADDITIONAL_PORTS=8081 \
     -e DEBUG=false \
+    -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
     binhex/arch-sabnzbdvpn
