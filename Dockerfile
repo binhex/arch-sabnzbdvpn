@@ -5,16 +5,16 @@ MAINTAINER binhex
 ##################
 
 # add supervisor conf file for app
-ADD setup/*.conf /etc/supervisor/conf.d/
+ADD build/*.conf /etc/supervisor/conf.d/
 
 # add bash scripts to install app
-ADD setup/root/*.sh /root/
+ADD build/root/*.sh /root/
 
-# add bash script to setup iptables
-ADD apps/root/*.sh /root/
+# add run bash scripts
+ADD run/root/*.sh /root/
 
-# add bash script to run sabnzbd
-ADD apps/nobody/*.sh /home/nobody/
+# add run bash scripts
+ADD run/nobody/*.sh /home/nobody/
 
 # install app
 #############
