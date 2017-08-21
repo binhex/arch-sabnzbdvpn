@@ -74,7 +74,7 @@ docker run -d \
     -e STRICT_PORT_FORWARD=no \
     -e ENABLE_PRIVOXY=yes \
     -e LAN_NETWORK=192.168.1.0/24 \
-    -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
+    -e NAME_SERVERS=209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4 \
     -e ADDITIONAL_PORTS=8081 \
     -e DEBUG=false \
     -e UMASK=000 \
@@ -110,7 +110,7 @@ docker run -d \
     -e VPN_PROV=airvpn \
     -e ENABLE_PRIVOXY=yes \
     -e LAN_NETWORK=192.168.1.0/24 \
-    -e NAME_SERVERS=8.8.8.8,8.8.4.4 \
+    -e NAME_SERVERS=209.222.18.222,37.235.1.174,8.8.8.8,209.222.18.218,37.235.1.177,8.8.4.4 \
     -e ADDITIONAL_PORTS=8081 \
     -e DEBUG=false \
     -e UMASK=000 \
