@@ -10,7 +10,7 @@ IFS=',' read -ra lan_network_list <<< "${LAN_NETWORK}"
 for lan_network_item in "${lan_network_list[@]}"; do
 
 	# strip whitespace from start and end of lan_network_item
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	echo "[info] Adding ${lan_network_item} as route via docker eth0"
 	ip route add "${lan_network_item}" via "${DEFAULT_GATEWAY}" dev eth0
@@ -113,7 +113,7 @@ if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 	for additional_port_item in "${additional_port_list[@]}"; do
 
 		# strip whitespace from start and end of additional_port_item
-		additional_port_item=$(echo "${additional_port_item}" | sed -e 's/^[ \t]*//')
+		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 		echo "[info] Adding additional incoming port ${additional_port_item} for eth0"
 
@@ -129,7 +129,7 @@ fi
 for lan_network_item in "${lan_network_list[@]}"; do
 
 	# strip whitespace from start and end of lan_network_item
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept input to privoxy if enabled
 	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
@@ -190,7 +190,7 @@ if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 	for additional_port_item in "${additional_port_list[@]}"; do
 
 		# strip whitespace from start and end of additional_port_item
-		additional_port_item=$(echo "${additional_port_item}" | sed -e 's/^[ \t]*//')
+		additional_port_item=$(echo "${additional_port_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 		echo "[info] Adding additional outgoing port ${additional_port_item} for eth0"
 
@@ -206,7 +206,7 @@ fi
 for lan_network_item in "${lan_network_list[@]}"; do
 
 	# strip whitespace from start and end of lan_network_item
-	lan_network_item=$(echo "${lan_network_item}" | sed -e 's/^[ \t]*//')
+	lan_network_item=$(echo "${lan_network_item}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 
 	# accept output from privoxy if enabled - used for lan access
 	if [[ $ENABLE_PRIVOXY == "yes" ]]; then
