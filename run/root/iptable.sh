@@ -88,7 +88,7 @@ iptables -A INPUT -i "${VPN_DEVICE_TYPE}" -j ACCEPT
 iptables -A INPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept input to vpn gateway
-iptables -A INPUT -i eth0 -p $VPN_PROTOCOL --sport $VPN_PORT -j ACCEPT
+iptables -A INPUT -i eth0 -p $VPN_PROTOCOL_IPTABLES --sport $VPN_PORT -j ACCEPT
 
 # accept input to sabnzbd webui port 8080
 iptables -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
@@ -155,7 +155,7 @@ iptables -A OUTPUT -o "${VPN_DEVICE_TYPE}" -j ACCEPT
 iptables -A OUTPUT -s "${docker_network_cidr}" -d "${docker_network_cidr}" -j ACCEPT
 
 # accept output from vpn gateway
-iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL --dport $VPN_PORT -j ACCEPT
+iptables -A OUTPUT -o eth0 -p $VPN_PROTOCOL_IPTABLES --dport $VPN_PORT -j ACCEPT
 
 # if iptable mangle is available (kernel module) then use mark
 if [[ $iptable_mangle_exit_code == 0 ]]; then
