@@ -52,10 +52,6 @@ Please replace all user variables in the above command defined by <> with the co
 
 `http://<host ip>:8118`
 
-**PIA provider**
-
-PIA users will need to supply VPN_USER and VPN_PASS, optionally define VPN_REMOTE (list of gateways https://www.privateinternetaccess.com/pages/client-support) if you wish to use another remote gateway other than the Netherlands.
-
 **PIA example**
 ```
 docker run -d \
