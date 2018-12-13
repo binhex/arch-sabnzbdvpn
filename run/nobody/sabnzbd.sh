@@ -1,73 +1,50 @@
 #!/bin/bash
 
-# if vpn set to "no" then don't run openvpn
-if [[ "${VPN_ENABLED}" == "no" ]]; then
+if [[ "${sabnzbd_running}" == "false" ]]; then
 
-	echo "[info] VPN not enabled, skipping VPN tunnel local ip checks"
-
-	# run sabnzbd (non daemonized, blocking)
 	echo "[info] Attempting to start SABnzbd..."
-	/usr/sbin/python2 /opt/sabnzbd/SABnzbd.py --config-file /config --server 0.0.0.0:8080 --https 8090
 
-else
+	# run SABnzbd (daemonized, non-blocking)
+	/usr/sbin/python2 /opt/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
 
-	echo "[info] VPN is enabled, checking VPN tunnel local ip is valid"
-
-	# set triggers to first run
-	sabnzbd_running="false"
-
-	# while loop to check ip
+	# make sure process sabnzbd DOES exist
+	retry_count=30
 	while true; do
 
-		# run script to check ip is valid for tunnel device (will block until valid)
-		source /home/nobody/getvpnip.sh
+		if ! pgrep -x "sabnzbd" > /dev/null; then
 
-		# if vpn_ip is not blank then run, otherwise log warning
-		if [[ ! -z "${vpn_ip}" ]]; then
+			retry_count=$((retry_count-1))
+			if [ "${retry_count}" -eq "0" ]; then
 
-			# check if sabnzbd is running, if not then skip reconfigure for ip
-			if ! pgrep -x python2 > /dev/null; then
-
-				echo "[info] SABnzbd not running"
-
-				# mark as sabnzbd not running
-				sabnzbd_running="false"
+				echo "[warn] Wait for SABnzbd process to start aborted"
+				break
 
 			else
 
-				# if sabnzbd is running, then reconfigure ip
-				sabnzbd_running="true"
+				if [[ "${DEBUG}" == "true" ]]; then
+					echo "[debug] Waiting for SABnzbd process to start..."
+				fi
 
-			fi
-
-			if [[ "${sabnzbd_running}" == "false" ]]; then
-
-				echo "[info] Attempting to start SABnzbd..."
-
-				# run sabnzbd (daemonized, non-blocking)
-				/usr/sbin/python2 /opt/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
-
-				echo "[info] SABnzbd started"
-
-			fi
-
-			# reset triggers to negative values
-			sabnzbd_running="false"
-
-			if [[ "${DEBUG}" == "true" ]]; then
-
-				echo "[debug] VPN IP is ${vpn_ip}"
+				sleep 1s
 
 			fi
 
 		else
 
-			echo "[warn] VPN IP not detected, VPN tunnel maybe down"
+			echo "[info] SABnzbd process started"
+			break
 
 		fi
 
-		sleep 30s
+	done
 
+	echo "[info] Waiting for SABnzbd process to start listening on port 8080..."
+
+	while [[ $(netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".8080\"") == "" ]]; do
+		sleep 0.1
 	done
 
 fi
+
+# set sabnzbd ip to current vpn ip (used when checking for changes on next run)
+sabnzbd_ip="${vpn_ip}"
