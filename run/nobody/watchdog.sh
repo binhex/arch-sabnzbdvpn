@@ -22,8 +22,6 @@ while true; do
 
 			else
 
-				echo "[info] SABnzbd running"
-
 				# mark as sabnzbd as running
 				sabnzbd_running="true"
 
