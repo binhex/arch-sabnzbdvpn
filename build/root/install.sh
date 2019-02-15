@@ -7,7 +7,7 @@ set -e
 ####
 
 # define pacman packages
-pacman_packages="git python2 python2-pyopenssl python2-feedparser p7zip ipcalc"
+pacman_packages="git python2 python2-pyopenssl python2-feedparser p7zip"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -264,17 +264,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		export ENABLE_PRIVOXY="no"
 	fi
 
-	if [[ $VPN_PROV == "pia" ]]; then
-
-		export STRICT_PORT_FORWARD=$(echo "${STRICT_PORT_FORWARD}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-		if [[ ! -z "${STRICT_PORT_FORWARD}" ]]; then
-			echo "[info] STRICT_PORT_FORWARD defined as '${STRICT_PORT_FORWARD}'" | ts '%Y-%m-%d %H:%M:%.S'
-		else
-			echo "[warn] STRICT_PORT_FORWARD not defined (via -e STRICT_PORT_FORWARD), defaulting to 'yes'" | ts '%Y-%m-%d %H:%M:%.S'
-			export STRICT_PORT_FORWARD="yes"
-		fi
-
-	fi
+	export RUN_UP_SCRIPT="no"
 
 fi
 
