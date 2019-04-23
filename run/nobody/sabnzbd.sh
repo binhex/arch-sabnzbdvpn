@@ -16,8 +16,9 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 			retry_count=$((retry_count-1))
 			if [ "${retry_count}" -eq "0" ]; then
 
-				echo "[warn] Wait for SABnzbd process to start aborted"
-				break
+				echo "[warn] Wait for SABnzbd process to start aborted, too many retries"
+				echo "[warn] Showing output from command before exit..."
+				timeout 10 /usr/sbin/python2 /opt/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; exit 1
 
 			else
 
@@ -43,6 +44,8 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 	while [[ $(netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".8080\"") == "" ]]; do
 		sleep 0.1
 	done
+
+	echo "[info] SABnzbd process is listening on port 8080"
 
 fi
 
