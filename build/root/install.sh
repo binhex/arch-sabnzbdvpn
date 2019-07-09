@@ -264,7 +264,7 @@ if [[ $VPN_ENABLED == "yes" ]]; then
 		export ENABLE_PRIVOXY="no"
 	fi
 
-	export RUN_UP_SCRIPT="no"
+	export APPLICATION="sabnzbd"
 
 fi
 
