@@ -21,7 +21,7 @@ fi
 aur_packages="sabnzbd"
 
 # call aur install script (arch user repo)
-source /root/aur.sh
+source aur.sh
 
 # container perms
 ####
@@ -75,7 +75,7 @@ EOF
 sed -i '/# PERMISSIONS_PLACEHOLDER/{
     s/# PERMISSIONS_PLACEHOLDER//g
     r /tmp/permissions_heredoc
-}' /root/init.sh
+}' init.sh
 rm /tmp/permissions_heredoc
 
 # env vars
@@ -274,7 +274,7 @@ EOF
 sed -i '/# ENVVARS_PLACEHOLDER/{
     s/# ENVVARS_PLACEHOLDER//g
     r /tmp/envvars_heredoc
-}' /root/init.sh
+}' init.sh
 rm /tmp/envvars_heredoc
 
 # cleanup
