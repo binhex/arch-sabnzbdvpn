@@ -30,7 +30,7 @@ fi
 ####
 
 # define aur packages
-aur_packages="sabnzbd"
+aur_packages="python2-sabyenc sabnzbd"
 
 # call aur install script (arch user repo)
 source aur.sh
