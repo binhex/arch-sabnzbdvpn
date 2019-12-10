@@ -19,7 +19,7 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /usr/local/bin/
 ####
 
 # define pacman packages
-pacman_packages="git python2 python2-pyopenssl python2-feedparser p7zip"
+pacman_packages="git python2 python2-pyopenssl python2-feedparser p7zip python3"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -30,7 +30,7 @@ fi
 ####
 
 # define aur packages
-aur_packages="python2-sabyenc sabnzbd"
+aur_packages="sabnzbd"
 
 # call aur install script (arch user repo)
 source aur.sh
