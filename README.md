@@ -86,9 +86,9 @@ file by using the following link https://airvpn.org/generator/
 
 1. Please select Linux and then choose the country you want to connect to
 2. Save the ovpn file to somewhere safe
-3. Start the delugevpn docker to create the folder structure
-4. Stop delugevpn docker and copy the saved ovpn file to the /config/openvpn/ folder on the host
-5. Start delugevpn docker
+3. Start the sabnzbdvpn docker to create the folder structure
+4. Stop sabnzbdvpn docker and copy the saved ovpn file to the /config/openvpn/ folder on the host
+5. Start sabnzbdvpn docker
 6. Check supervisor.log to make sure you are connected to the tunnel
 
 **AirVPN example**
