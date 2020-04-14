@@ -101,7 +101,7 @@ iptables -A INPUT -i "${docker_interface}" -p tcp --sport 8080 -j ACCEPT
 iptables -A INPUT -i "${docker_interface}" -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i "${docker_interface}" -p tcp --sport 8090 -j ACCEPT
 
-# additional port list for scripts
+# additional port list for scripts or container linking
 if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 
 	# split comma separated string into list from ADDITIONAL_PORTS env variable
@@ -190,7 +190,7 @@ iptables -A OUTPUT -o "${docker_interface}" -p tcp --sport 8080 -j ACCEPT
 iptables -A OUTPUT -o "${docker_interface}" -p tcp --dport 8090 -j ACCEPT
 iptables -A OUTPUT -o "${docker_interface}" -p tcp --sport 8090 -j ACCEPT
 
-# additional port list for scripts
+# additional port list for scripts or container linking
 if [[ ! -z "${ADDITIONAL_PORTS}" ]]; then
 
 	# split comma separated string into list from ADDITIONAL_PORTS env variable
