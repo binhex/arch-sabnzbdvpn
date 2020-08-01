@@ -5,7 +5,7 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 	echo "[info] Attempting to start SABnzbd..."
 
 	# run SABnzbd (daemonized, non-blocking)
-	/usr/sbin/python2 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
+	/usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
 
 	# make sure process sabnzbd DOES exist
 	retry_count=30
@@ -18,7 +18,7 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 
 				echo "[warn] Wait for SABnzbd process to start aborted, too many retries"
 				echo "[warn] Showing output from command before exit..."
-				timeout 10 /usr/sbin/python2 /usr/lib/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; exit 1
+				timeout 10 /usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; exit 1
 
 			else
 
