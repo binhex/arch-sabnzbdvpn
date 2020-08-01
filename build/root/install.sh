@@ -55,7 +55,7 @@ source aur.sh
 ####
 
 # define comma separated list of paths 
-install_paths="/opt/sabnzbd,/etc/privoxy,/home/nobody"
+install_paths="/usr/lib/sabnzbd,/var/lib/sabnzbd,/home/nobody"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"
