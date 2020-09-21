@@ -8,7 +8,8 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 	/usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
 
 	# make sure process sabnzbd DOES exist
-	retry_count=30
+	retry_count=12
+	retry_wait=1
 	while true; do
 
 		if ! pgrep -fa "sabnzbd" > /dev/null; then
@@ -17,16 +18,17 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 			if [ "${retry_count}" -eq "0" ]; then
 
 				echo "[warn] Wait for SABnzbd process to start aborted, too many retries"
-				echo "[warn] Showing output from command before exit..."
-				timeout 10 /usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; exit 1
+				echo "[info] Showing output from command before exit..."
+				timeout 10 /usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; return 1
 
 			else
 
 				if [[ "${DEBUG}" == "true" ]]; then
-					echo "[debug] Waiting for SABnzbd process to start..."
+					echo "[debug] Waiting for rTorrent process to start"
+					echo "[debug] Re-check in ${retry_wait} secs..."
+					echo "[debug] ${retry_count} retries left"
 				fi
-
-				sleep 1s
+				sleep "${retry_wait}s"
 
 			fi
 
