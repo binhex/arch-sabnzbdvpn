@@ -65,12 +65,12 @@ if [[ "${iptable_mangle_exit_code}" == 0 ]]; then
 	# setup route for sabnzbd webui http using set-mark to route traffic for port 8080 to lan interface
 	echo "8080    webui_http" >> /etc/iproute2/rt_tables
 	ip rule add fwmark 1 table webui_http
-	ip route add default via $DEFAULT_GATEWAY table webui_http
+	ip route add default via "${default_gateway}" table webui_http
 
 	# setup route for sabnzbd webui https using set-mark to route traffic for port 8090 to lan interface
 	echo "8090    webui_https" >> /etc/iproute2/rt_tables
 	ip rule add fwmark 2 table webui_https
-	ip route add default via $DEFAULT_GATEWAY table webui_https
+	ip route add default via "${default_gateway}" table webui_https
 
 fi
 
