@@ -112,6 +112,10 @@ for vpn_remote_port_item in "${vpn_remote_port_list[@]}"; do
 
 done
 
+# accept input to sabnzbd webui port 8080
+iptables -A INPUT -i "${docker_interface}" -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -i "${docker_interface}" -p tcp --sport 8080 -j ACCEPT
+
 # accept input to sabnzbd webui port 8090
 iptables -A INPUT -i "${docker_interface}" -p tcp --dport 8090 -j ACCEPT
 iptables -A INPUT -i "${docker_interface}" -p tcp --sport 8090 -j ACCEPT
