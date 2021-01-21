@@ -43,3 +43,6 @@ EXPOSE 8090
 
 # run script to set uid, gid and permissions
 CMD ["/bin/bash", "/usr/local/bin/init.sh"]
+
+# healthcheck
+HEALTHCHECK CMD curl -sL --tail localhost:8080 && curl -sL --fail google.com || exit 1
