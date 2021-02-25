@@ -12,7 +12,7 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 	retry_wait=1
 	while true; do
 
-		if ! pgrep -fa "sabnzbd" > /dev/null; then
+		if ! pgrep -fa "SABnzbd.py" > /dev/null; then
 
 			retry_count=$((retry_count-1))
 			if [ "${retry_count}" -eq "0" ]; then
