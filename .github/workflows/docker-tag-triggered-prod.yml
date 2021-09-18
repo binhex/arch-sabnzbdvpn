@@ -71,6 +71,25 @@ jobs:
           retry_wait_seconds: 120
           command: |
             docker images
+      - name: Run Smoke Tests
+        shell: bash
+        run: |
+          host_port="9999"
+          container_port="8090"
+          retry_count=60
+          docker run -d --rm --net='bridge' -v /tmp/config:/config -v /tmp/data:/data -v /tmp/media:/media -p "${host_port}:${container_port}" ghcr.io/${{ github.repository }}:${{ github.event.inputs.tags }}
+          docker ps
+          until sudo lsof -i:${host_port}; do
+            retry_count=$((retry_count-1))
+            if [ "${retry_count}" -eq "0" ]; then
+              echo "[FAILED] Showing open ports and log..."
+              timeout 10s sudo lsof
+              cat '/tmp/config/supervisord.log'
+              exit 1
+            fi
+            sleep 1s
+          done
+          echo "[PASSED]"
       - name: Push Docker image to Docker Hub
         uses: nick-invision/retry@v2.4.0
         with:
