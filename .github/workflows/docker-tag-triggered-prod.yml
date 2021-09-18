@@ -77,7 +77,7 @@ jobs:
           host_port="9999"
           container_port="8090"
           retry_count=60
-          docker run -d --rm --net='bridge' -v /tmp/config:/config -v /tmp/data:/data -v /tmp/media:/media -p "${host_port}:${container_port}" ghcr.io/${{ github.repository }}:${{ github.event.inputs.tags }}
+          docker run -d --rm --net='bridge' -v /tmp/config:/config -v /tmp/data:/data -v /tmp/media:/media -p "${host_port}:${container_port}" ghcr.io/${{ github.repository }}:${{ steps.identify_tag.outputs.tag }}
           docker ps
           until sudo lsof -i:${host_port}; do
             retry_count=$((retry_count-1))
