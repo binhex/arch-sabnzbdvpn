@@ -43,12 +43,12 @@ jobs:
               --tag ${{ github.repository }}:${{ github.event.inputs.tags }} \
               --tag ghcr.io/${{ github.repository }}:${{ github.event.inputs.tags }} \
               .
-      - name: Run Smoke Tests
+      - name: Run Tests
         shell: bash
         run: |
           git_clone_scripts_dest="/tmp/scripts"
           git_clone_scripts_repo="https://github.com/binhex/scripts.git"
-          
+
           git clone "${git_clone_scripts_repo}" "${git_clone_scripts_dest}"
           "${git_clone_scripts_dest}/shell/arch/docker/testrunner.sh" --image-name "ghcr.io/${{ github.repository }}:${{ github.event.inputs.tags }}" --host-port '9999' --container-port '8090' --network-type 'bridge'
       - name: Push Docker image to Docker Hub
