@@ -31,7 +31,7 @@ fi
 source upd.sh
 
 # define pacman packages
-pacman_packages="git python3 python-pyopenssl p7zip unrar unzip par2cmdline"
+pacman_packages="git python3 python-pyopenssl python-jaraco.context p7zip unrar unzip par2cmdline"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -46,6 +46,12 @@ aur_packages="sabnzbd"
 
 # call aur install script (arch user repo)
 source aur.sh
+
+# custom
+###
+
+# required as AOR package is out of date currently and sab currently requirs jaraco.context >= 4.1
+pip install jaraco.context
 
 # container perms
 ####
