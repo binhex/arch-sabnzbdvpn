@@ -31,7 +31,7 @@ fi
 source upd.sh
 
 # define pacman packages
-pacman_packages="git python3 python-pyopenssl python-jaraco.context p7zip unrar unzip par2cmdline"
+pacman_packages="git python3 python-pyopenssl p7zip unrar unzip par2cmdline"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
