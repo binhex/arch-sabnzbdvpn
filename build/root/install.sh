@@ -42,22 +42,28 @@ fi
 ####
 
 # define aur packages
-aur_packages="sabnzbd"
+aur_packages=""
 
 # call aur install script (arch user repo)
 source aur.sh
 
-# custom
-###
+# github
+####
 
-# required as AOR package is out of date currently and sab currently requirs jaraco.context >= 4.1
-pip install jaraco.context
+# download latest release from github for app, grabbing particular asset as source.zip does not include locale
+github.sh --install-path '/usr/lib/sabnzbd' --github-owner 'sabnzbd' --github-repo 'sabnzbd' --download-assets 'SABnzbd.*src.tar.gz' --strip-components '1' --query-type 'release'
+
+# pip
+####
+
+# use pip to install requirements as defined in requirements.txt
+pip.sh --install-path '/usr/lib/sabnzbd' --log-level 'WARN'
 
 # container perms
 ####
 
 # define comma separated list of paths
-install_paths="/usr/lib/sabnzbd,/var/lib/sabnzbd,/home/nobody"
+install_paths="/usr/lib/sabnzbd,/home/nobody"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"

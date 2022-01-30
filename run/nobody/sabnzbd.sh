@@ -4,8 +4,14 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 
 	echo "[info] Attempting to start SABnzbd..."
 
-	# run SABnzbd (daemonized, non-blocking)
-	/usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
+	# change to app install path and activate virtualenv
+	cd /usr/lib/sabnzbd
+
+	# activate virtualenv where requirements have been installed from install.sh
+	source ./env/bin/activate
+
+	# run app (non blocking)
+	python3 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
 
 	# make sure process sabnzbd DOES exist
 	retry_count=12
@@ -19,7 +25,7 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 
 				echo "[warn] Wait for SABnzbd process to start aborted, too many retries"
 				echo "[info] Showing output from command before exit..."
-				timeout 10 /usr/sbin/python3 /usr/lib/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; return 1
+				timeout 10 python3 /usr/lib/sabnzbd/SABnzbd.py --console --config-file /config --server 0.0.0.0:8080 --https 8090 ; return 1
 
 			else
 
