@@ -50,14 +50,16 @@ source aur.sh
 # github
 ####
 
-# download latest release from github for app, grabbing particular asset as source.zip does not include locale
-github.sh --install-path '/usr/lib/sabnzbd' --github-owner 'sabnzbd' --github-repo 'sabnzbd' --download-assets 'SABnzbd.*src.tar.gz' --strip-components '1' --query-type 'release'
+install_path="/usr/lib/sabnzbd"
 
-# pip
+# download latest release from github for app, grabbing particular asset as source.zip does not include locale
+github.sh --install-path "${install_path}" --github-owner 'sabnzbd' --github-repo 'sabnzbd' --download-assets 'SABnzbd.*src.tar.gz' --strip-components '1' --query-type 'release'
+
+# python
 ####
 
 # use pip to install requirements as defined in requirements.txt
-pip.sh --install-path '/usr/lib/sabnzbd' --log-level 'WARN'
+pip.sh --install-path "${install_path}" --log-level 'WARN'
 
 # container perms
 ####
