@@ -50,22 +50,30 @@ source aur.sh
 # github
 ####
 
-install_path="/usr/lib/sabnzbd"
+install_path_sabnzbd="/usr/lib/sabnzbd"
 
 # download latest release from github for app, grabbing particular asset as source.zip does not include locale
-github.sh --install-path "${install_path}" --github-owner 'sabnzbd' --github-repo 'sabnzbd' --download-assets 'SABnzbd.*src.tar.gz' --strip-components '1' --query-type 'release'
+github.sh --install-path "${install_path_sabnzbd}" --github-owner 'sabnzbd' --github-repo 'sabnzbd' --download-assets 'SABnzbd.*src.tar.gz' --strip-components '1' --query-type 'release'
+
+install_path_nzbnotify="/usr/lib/nzbnotify"
+
+# download latest release from github for app, grabbing particular asset as source.zip does not include locale
+github.sh --install-path "${install_path_nzbnotify}" --github-owner 'caronc' --github-repo 'nzb-notify' --query-type 'branch' --download-branch 'master'
 
 # python
 ####
 
-# use pip to install requirements as defined in requirements.txt
-pip.sh --install-path "${install_path}" --log-level 'WARN'
+# use pip to install requirements for sabnzbd as defined in requirements.txt
+pip.sh --install-path "${install_path_sabnzbd}" --log-level 'WARN'
+
+# use pip to install requirements for nzbnotify as defined in requirements.txt
+pip.sh --install-path "${install_path_nzbnotify}" --log-level 'WARN'
 
 # container perms
 ####
 
 # define comma separated list of paths
-install_paths="/usr/lib/sabnzbd,/home/nobody"
+install_paths="/usr/lib/sabnzbd,/usr/lib/nzbnotify,/home/nobody"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"
