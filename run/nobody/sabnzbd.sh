@@ -4,12 +4,6 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 
 	echo "[info] Attempting to start SABnzbd..."
 
-	# change to app install path and activate virtualenv
-	cd /usr/lib/sabnzbd
-
-	# activate virtualenv where requirements have been installed from install.sh
-	source ./env/bin/activate
-
 	# run app (non blocking)
 	python3 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
 

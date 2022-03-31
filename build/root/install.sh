@@ -64,10 +64,10 @@ github.sh --install-path "${install_path_nzbnotify}" --github-owner 'caronc' --g
 ####
 
 # use pip to install requirements for sabnzbd as defined in requirements.txt
-pip.sh --install-path "${install_path_sabnzbd}" --log-level 'WARN'
+pip.sh --install-path "${install_path_sabnzbd}" --create-virtualenv 'no' --log-level 'WARN'
 
 # use pip to install requirements for nzbnotify as defined in requirements.txt
-pip.sh --install-path "${install_path_nzbnotify}" --log-level 'WARN'
+pip.sh --install-path "${install_path_nzbnotify}" --create-virtualenv 'no' --log-level 'WARN'
 
 # container perms
 ####
