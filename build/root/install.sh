@@ -63,11 +63,13 @@ github.sh --install-path "${install_path_nzbnotify}" --github-owner 'caronc' --g
 # python
 ####
 
-# use pip to install requirements for sabnzbd as defined in requirements.txt
-pip.sh --install-path "${install_path_sabnzbd}" --create-virtualenv 'no' --log-level 'WARN'
+virtualenv_path="${install_path_sabnzbd}/venv"
 
-# use pip to install requirements for nzbnotify as defined in requirements.txt
-pip.sh --install-path "${install_path_nzbnotify}" --create-virtualenv 'no' --log-level 'WARN'
+# use pip to install requirements for sabnzbd as defined in requirements.txt
+pip.sh --install-path "${install_path_sabnzbd}" --create-virtualenv 'yes' --virtualenv-path "${virtualenv_path}" --log-level 'WARN'
+
+# use pip to install requirements for nzbnotify as defined in requirements.txt, create modules in sabnz\bd virtualenv path
+pip.sh --install-path "${install_path_nzbnotify}" --create-virtualenv 'yes' --virtualenv-path "${virtualenv_path}" --log-level 'WARN'
 
 # container perms
 ####

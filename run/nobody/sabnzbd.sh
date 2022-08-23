@@ -4,8 +4,14 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 
 	echo "[info] Attempting to start SABnzbd..."
 
-	# run app (non blocking)
-	python3 /usr/lib/sabnzbd/SABnzbd.py --daemon --config-file /config --server 0.0.0.0:8080 --https 8090
+	install_path="/usr/lib/sabnzbd"
+	virtualenv_path="${install_path}/venv"
+
+	# activate virtualenv where requirements have been installed from install.sh
+	source "${virtualenv_path}/bin/activate"
+
+	# run app
+	python3 "${install_path}/SABnzbd.py" --config-file /config --server 0.0.0.0:8080 --https 8090
 
 	# make sure process sabnzbd DOES exist
 	retry_count=12
