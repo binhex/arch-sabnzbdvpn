@@ -11,7 +11,7 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 	source "${virtualenv_path}/bin/activate"
 
 	# run app
-	python3 "${install_path}/SABnzbd.py" --config-file /config --server 0.0.0.0:8080 --https 8090
+	python3 "${install_path}/SABnzbd.py" --config-file /config --server 0.0.0.0:8080 --https 8090 --daemon
 
 	# make sure process sabnzbd DOES exist
 	retry_count=12
