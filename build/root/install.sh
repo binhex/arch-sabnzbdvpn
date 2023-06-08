@@ -71,9 +71,6 @@ pip.sh --install-path "${install_path_sabnzbd}" --create-virtualenv 'yes' --virt
 # use pip to install requirements for nzbnotify as defined in requirements.txt, create modules in sabnz\bd virtualenv path
 pip.sh --install-path "${install_path_nzbnotify}" --create-virtualenv 'yes' --virtualenv-path "${virtualenv_path}" --log-level 'WARN'
 
-# hack to fix this outstanding issue:- https://github.com/sabnzbd/sabnzbd/issues/2228
-sed -i -e "s~'Error in HTTPServer\.serve', level=logging\.ERROR,~'Error in HTTPServer.serve', level=logging.DEBUG,~g" "/usr/lib/sabnzbd/venv/lib/python3.10/site-packages/cheroot/server.py"
-
 # container perms
 ####
 
