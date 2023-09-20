@@ -30,7 +30,7 @@ if [[ "${sabnzbd_running}" == "false" ]]; then
 			else
 
 				if [[ "${DEBUG}" == "true" ]]; then
-					echo "[debug] Waiting for rTorrent process to start"
+					echo "[debug] Waiting for SABnzbd process to start"
 					echo "[debug] Re-check in ${retry_wait} secs..."
 					echo "[debug] ${retry_count} retries left"
 				fi
