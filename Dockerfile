@@ -27,14 +27,6 @@ ADD run/nobody/*.sh /home/nobody/
 RUN chmod +x /root/*.sh /home/nobody/*.sh && \
 	/bin/bash /root/install.sh "${RELEASETAG}" "${TARGETARCH}"
 
-# docker settings
-#################
-
-# expose port for http
-EXPOSE 8080
-
-# expose port for https
-EXPOSE 8090
 
 # set permissions
 #################
