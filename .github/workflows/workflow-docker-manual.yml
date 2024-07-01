@@ -70,7 +70,7 @@ jobs:
           echo "app_name=$app_name" >> $GITHUB_OUTPUT
         id: generate_app_name
       - name: Build amd64 image and export to Docker for testing
-        uses: Wandalen/wretry.action@master
+        uses: Wandalen/wretry.action@3
         with:
           action: docker/build-push-action@v5
           with: |
