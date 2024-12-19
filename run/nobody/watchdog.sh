@@ -6,7 +6,6 @@ while true; do
 	# reset triggers to negative values
 	sabnzbd_running="false"
 	privoxy_running="false"
-	ip_change="false"
 
 	if [[ "${VPN_ENABLED}" == "yes" ]]; then
 
