@@ -99,7 +99,6 @@ default credentials: admin/socks
 
 ```bash
 docker run -d \
-
     --cap-add=NET_ADMIN \
     -p 8080:8080 \
     -p 8090:8090 \
@@ -131,9 +130,7 @@ docker run -d \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
-
     binhex/arch-sabnzbdvpn
-
 ```
 
 ## OpenVPN
