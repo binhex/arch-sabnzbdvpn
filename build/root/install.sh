@@ -78,12 +78,12 @@ aur.sh --aur-package "${aur_packages}"
 # github
 ####
 
-install_path_sabnzbd="/usr/lib/sabnzbd"
+install_path_sabnzbd="/usr/lib/sabnzbd/"
 
 # download latest release from github for app, grabbing particular asset as source.zip does not include locale
 github.sh --install-path "${install_path_sabnzbd}" --github-owner 'sabnzbd' --github-repo 'sabnzbd' --download-assets 'SABnzbd.*src.tar.gz' --strip-components '1' --query-type 'release'
 
-install_path_nzbnotify="/usr/lib/nzbnotify"
+install_path_nzbnotify="/usr/lib/nzbnotify/"
 
 # download latest commit from master branch for app
 github.sh --install-path "${install_path_nzbnotify}" --github-owner 'caronc' --github-repo 'nzb-notify' --query-type 'branch' --download-branch 'master'
