@@ -88,6 +88,18 @@ install_path_nzbnotify="/usr/lib/nzbnotify/"
 # download latest commit from master branch for app
 github.sh --install-path "${install_path_nzbnotify}" --github-owner 'caronc' --github-repo 'nzb-notify' --query-type 'branch' --download-branch 'master'
 
+install_path_7zip="/usr/bin/"
+
+# required as there is no arm64 package for 7zip at present 2025-04-13
+if [[ "${TARGETARCH}" == "arm64" ]]; then
+	download_assets='.*linux-arm64.tar.xz'
+else
+	download_assets='.*linux-x64.tar.xz'
+fi
+
+# download latest release from github for app, grabbing particular asset as source.zip does not include locale
+github.sh --install-path "${install_path_7zip}" --github-owner 'ip7z' --github-repo '7zip' --download-assets "${download_assets}" --strip-components '1' --query-type 'release'
+
 # python
 ####
 
@@ -96,24 +108,8 @@ virtualenv_path="${install_path_sabnzbd}/venv"
 # use pip to install requirements for sabnzbd as defined in requirements.txt
 python.sh --requirements-path "${install_path_sabnzbd}" --create-virtualenv 'yes' --virtualenv-path "${virtualenv_path}"
 
-# use pip to install requirements for nzbnotify as defined in requirements.txt, create modules in sabnz\bd virtualenv path
+# use pip to install requirements for nzbnotify as defined in requirements.txt, create modules in sabnzbd virtualenv path
 python.sh --requirements-path "${install_path_nzbnotify}" --create-virtualenv 'yes' --virtualenv-path "${virtualenv_path}"
-
-# custom
-####
-
-# required as there is no arm64 package for 7zip at present 2025-04-13
-if [[ "${TARGETARCH}" == "arm64" ]]; then
-	curl -o /tmp/7zip.tar.xz -L https://www.7-zip.org/a/7z2409-linux-arm64.tar.xz
-else
-	curl -o /tmp/7zip.tar.xz -L https://www.7-zip.org/a/7z2409-linux-x64.tar.xz
-fi
-
-# extract, remove tar file and move to /usr/bin
-tar -xvf /tmp/7zip.tar.xz -C /tmp
-rm /tmp/7zip.tar.xz
-mv /tmp/7zzs /usr/bin/7z
-chmod +x /usr/bin/7z
 
 # container perms
 ####
