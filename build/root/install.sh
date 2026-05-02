@@ -100,6 +100,9 @@ fi
 # download latest release from github for app, grabbing particular asset as source.zip does not include locale
 github.sh --install-path "${install_path_7zip}" --github-owner 'ip7z' --github-repo '7zip' --download-assets "${download_assets}" --strip-components '1' --query-type 'release'
 
+# hack as sabnzbd is looking for '7za' binary, 7zip git has '7zz' and '7zzs' binaries
+ln -fs /usr/bin/7zz /usr/bin/7za
+
 # python
 ####
 
